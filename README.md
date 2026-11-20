@@ -4,7 +4,7 @@ A [Next.js](https://nextjs.org) starter for [MCP Apps](https://modelcontextproto
 
 One Next.js app is both:
 
-1. **The MCP server** (`app/mcp/route.ts`): tools and a `ui://` resource, served with [`mcp-handler`](https://github.com/vercel/mcp-handler) and the [MCP Apps SDK](https://github.com/modelcontextprotocol/ext-apps).
+1. **The MCP server** (`app/mcp/route.ts`): tools and a `ui://` resource, served with [`mcp-handler`](https://github.com/vercel-labs/mcp-handler) and the [MCP Apps SDK](https://github.com/modelcontextprotocol/ext-apps).
 2. **The widget** (`app/page.tsx`): a regular Next.js page. The MCP server serves its server-rendered HTML as the `ui://` resource, and the host renders it in a sandboxed iframe.
 
 ## What's included
@@ -117,7 +117,7 @@ Because one `ui.domain` value can't satisfy both hosts, `lib/widget.ts` picks it
 - **Widget**: `app/page.tsx` (plus any other pages). Read state with `useMcpApp()` from `app/hooks/use-mcp-app.ts`.
 - **CSP**: add every origin the widget fetches from or loads assets from to `widgetCsp()` in `lib/widget.ts`. Keep the list minimal: hosts review it, and `resourceDomains` also allows scripts.
 - **Styling**: use the host-variable tokens in `app/globals.css` (`bg-background-secondary`, `text-text-secondary`, `border-border-primary`, …) so the widget follows each host's theme.
-- **Auth**: to require sign-in, wrap the handler with `withMcpAuth` from `mcp-handler` ([guide](https://github.com/vercel/mcp-handler/blob/main/docs/AUTHORIZATION.md)). Both hosts support OAuth with Client ID Metadata Documents and Dynamic Client Registration ([Claude](https://claude.com/docs/connectors/building/authentication), [ChatGPT](https://developers.openai.com/plugins/build/auth)).
+- **Auth**: to require sign-in, wrap the handler with `withMcpAuth` from `mcp-handler` ([guide](https://github.com/vercel-labs/mcp-handler/blob/main/docs/AUTHORIZATION.md)). Both hosts support OAuth with Client ID Metadata Documents and Dynamic Client Registration ([Claude](https://claude.com/docs/connectors/building/authentication), [ChatGPT](https://developers.openai.com/plugins/build/auth)).
 
 ## Environment variables
 
@@ -161,4 +161,4 @@ next.config.ts                     assetPrefix, dev origins, CORS headers and pr
 - [MCP Apps overview](https://modelcontextprotocol.io/extensions/apps/overview) · [specification](https://github.com/modelcontextprotocol/ext-apps/blob/main/specification/2026-01-26/apps.mdx) · [SDK docs](https://apps.extensions.modelcontextprotocol.io/api/)
 - [Build MCP Apps for Claude](https://claude.com/docs/connectors/building/mcp-apps/getting-started) · [design guidelines](https://claude.com/docs/connectors/building/mcp-apps/design-guidelines)
 - [Add UI to your MCP server (ChatGPT)](https://developers.openai.com/plugins/build/chatgpt-ui) · [UI guidelines](https://developers.openai.com/plugins/concepts/ui-guidelines)
-- [mcp-handler](https://github.com/vercel/mcp-handler)
+- [mcp-handler](https://github.com/vercel-labs/mcp-handler)
