@@ -2,8 +2,8 @@
  * Inline script that lets a Next.js page run inside an MCP Apps host.
  *
  * The host loads the widget HTML into a sandboxed iframe on its own origin
- * (often `about:srcdoc` or a document written by a sandbox proxy), so the
- * page's origin is not this server. `assetPrefix` (next.config.ts) makes
+ * (written into the frame by a sandbox proxy, or served from the host's
+ * sandbox domain), so the page's origin is not this server. `assetPrefix` (next.config.ts) makes
  * script/style URLs absolute; this script covers the rest, before React
  * hydrates:
  *

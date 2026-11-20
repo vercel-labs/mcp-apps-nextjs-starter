@@ -35,6 +35,6 @@ export function isGreeting(value: unknown): value is Greeting {
     typeof v.name === "string" &&
     typeof v.greeting === "string" &&
     typeof v.language === "string" &&
-    v.language in LANGUAGES
+    Object.hasOwn(LANGUAGES, v.language)
   );
 }

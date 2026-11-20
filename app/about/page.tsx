@@ -29,8 +29,8 @@ export default function AboutPage() {
           display mode.
         </p>
         <p>
-          This page is a server component reached through client-side navigation, which only
-          happens in full screen.
+          This page is a server component reached through client-side navigation. Inside a host,
+          the widget offers these pages in full screen.
         </p>
       </div>
     </main>

@@ -76,7 +76,7 @@ BASE_URL=https://xxxx.ngrok-free.app
 
 Restart `pnpm dev`, then add `https://xxxx.ngrok-free.app/mcp`:
 
-- **Claude**: [Customize > Connectors](https://claude.ai/customize/connectors) → add a custom connector ([docs](https://claude.com/docs/connectors/building/testing)). Use a remote URL: Claude Desktop's local (stdio) config doesn't support app tools or `ui.domain`.
+- **Claude**: [Customize > Connectors](https://claude.ai/customize/connectors) → add a custom connector ([docs](https://claude.com/docs/connectors/building/testing)).
 - **ChatGPT**: [Plugins](https://chatgpt.com/plugins) → **+** → **Add custom MCP server** ([docs](https://developers.openai.com/plugins/deploy/connect-chatgpt)).
 
 Then ask: _"Greet Ada"_.

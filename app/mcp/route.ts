@@ -13,7 +13,7 @@ import {
   widgetListingMeta,
 } from "@/lib/widget";
 
-const name = z.string().min(1).max(100).describe("Name of the person to greet");
+const name = z.string().trim().min(1).max(100).describe("Name of the person to greet");
 const language = z.enum(LANGUAGE_CODES).describe("Language of the greeting");
 const greetingOutput = z.object({ name: z.string(), language, greeting: z.string() });
 
