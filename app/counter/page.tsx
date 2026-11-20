@@ -7,43 +7,62 @@ export default function CounterPage() {
   const [count, setCount] = useState(0);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-zinc-950">
-      <main className="flex w-full max-w-xl flex-col gap-6 px-8 py-16">
-        <Link
-          href="/"
-          prefetch={false}
-          className="text-sm text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+    <main className="mx-auto flex w-full max-w-xl flex-col gap-4 p-4 py-8">
+      <BackLink />
+
+      <h1 className="text-2xl font-semibold text-text-primary">Counter</h1>
+      <p className="text-sm text-text-secondary">
+        Client-side state and a client-side navigation, to check that hydration and routing work
+        inside the host&apos;s sandboxed iframe.
+      </p>
+
+      <div className="flex items-center gap-4">
+        <CounterButton label="Decrement" onClick={() => setCount((c) => c - 1)}>
+          −
+        </CounterButton>
+        <span
+          aria-live="polite"
+          className="min-w-[3ch] text-center text-2xl font-semibold text-text-primary tabular-nums"
         >
-          &larr; Back
-        </Link>
+          {count}
+        </span>
+        <CounterButton label="Increment" onClick={() => setCount((c) => c + 1)}>
+          +
+        </CounterButton>
+      </div>
+    </main>
+  );
+}
 
-        <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-          Counter
-        </h1>
+function CounterButton({
+  label,
+  onClick,
+  children,
+}: {
+  label: string;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      onClick={onClick}
+      className="flex size-11 items-center justify-center rounded-md border border-border-primary text-lg font-medium text-text-primary transition-colors hover:bg-background-secondary focus-visible:ring-2 focus-visible:ring-ring-primary focus-visible:outline-none"
+    >
+      {children}
+    </button>
+  );
+}
 
-        <p className="text-zinc-600 dark:text-zinc-400">
-          A simple client-side counter to verify that React hydration and
-          interactivity work inside the ChatGPT, Cursor, or Claude.ai iframe.
-        </p>
-
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => setCount((c) => c - 1)}
-            className="flex h-10 w-10 items-center justify-center rounded-lg border border-zinc-200 bg-white text-lg font-medium text-zinc-900 transition-colors hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
-          >
-            -
-          </button>
-          <span className="min-w-[3ch] text-center text-2xl font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
-            {count}
-          </span>
-          <button
-            onClick={() => setCount((c) => c + 1)}
-            className="flex h-10 w-10 items-center justify-center rounded-lg border border-zinc-200 bg-white text-lg font-medium text-zinc-900 transition-colors hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
-          >
-            +
-          </button>
-        </div>
-      </main>
-    </div>
+function BackLink() {
+  return (
+    <Link
+      href="/"
+      prefetch={false}
+      className="text-sm text-text-secondary hover:text-text-primary"
+    >
+      &larr; Back
+    </Link>
   );
 }
