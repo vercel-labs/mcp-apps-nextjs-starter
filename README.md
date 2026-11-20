@@ -128,7 +128,7 @@ Because one `ui.domain` value can't satisfy both hosts, `lib/widget.ts` picks it
   - Allowed origins: this app, Claude, ChatGPT, localhost in development, and `MCP_ALLOWED_ORIGINS`.
   - CORS reflects only allowed origins and never allows credentials.
   - The widget doesn't call `/mcp` directly. It goes through the host (`app.callServerTool`).
-- **Pages and assets** (`proxy.ts`, `next.config.ts`): `Access-Control-Allow-Origin: *` on `GET`/`HEAD` only, for public, uncredentialed content. Server Actions and other writes stay same-origin. If the widget calls your own route handlers with credentials, give those routes an explicit allowlist.
+- **Pages and assets** (`proxy.ts`, `next.config.ts`): `Access-Control-Allow-Origin: *` on `GET`/`HEAD` only, for public, uncredentialed content. `Access-Control-Expose-Headers: *` lets the Next.js router read its response headers (such as `x-nextjs-deployment-id` on Vercel); without it, client-side navigation falls back to a full page load, which the sandbox blocks. Server Actions and other writes stay same-origin. If the widget calls your own route handlers with credentials, give those routes an explicit allowlist.
 - **Links**: the widget never navigates itself. External `http(s)`/`mailto` links go through `ui/open-link`, and only when the host supports it.
 - **Config**: `BASE_URL`, `CLAUDE_WIDGET_DOMAIN`, `CHATGPT_WIDGET_DOMAIN` and `MCP_ALLOWED_ORIGINS` are validated at startup, so malformed values fail the build instead of ending up in CSP or CORS headers.
 

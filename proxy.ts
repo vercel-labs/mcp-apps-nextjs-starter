@@ -36,6 +36,10 @@ export function proxy(request: NextRequest) {
   const response = NextResponse.next();
   if (request.method === "GET" || request.method === "HEAD") {
     response.headers.set("Access-Control-Allow-Origin", "*");
+    // The router reads response headers such as x-nextjs-deployment-id (set on
+    // Vercel); if it can't, it falls back to a full-page navigation, which
+    // breaks the widget inside the host's iframe.
+    response.headers.set("Access-Control-Expose-Headers", "*");
   }
   return response;
 }
