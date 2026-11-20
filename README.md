@@ -83,9 +83,6 @@ Then ask: _"Greet Ada"_.
 
 In `next dev`, the host's CSP blocks `eval`, which React uses only for development-time debugging. The widget still works, but Next.js shows a dismissible **1 Issue** toast. Production builds don't use `eval`.
 
-> [!WARNING]
-> A tunnel exposes your dev server publicly. Shut it down when you're done.
-
 ## Deploy to Vercel
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel-labs/mcp-apps-nextjs-starter)
