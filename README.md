@@ -22,16 +22,18 @@ One Next.js app is both:
 
 ## How it works
 
-```
-Host (Claude / ChatGPT)                       This Next.js app
-───────────────────────                       ─────────────────────────────
-tools/call greet ───────────────────────────▶ /mcp  → { content, structuredContent }
-resources/read ui://…/widget-v1.html ───────▶ /mcp  → HTML of "/" + _meta.ui (CSP, …)
-render HTML in a sandboxed iframe
-  ├─ scripts, styles, RSC payloads ─────────▶ https://your-app/_next/…  (CORS)
-  └─ postMessage (JSON-RPC, ui/*) ◀───────▶ App bridge in the widget
-       ui/notifications/tool-result            → renders the greeting
-       tools/call translate_greeting ───────▶ /mcp (proxied by the host)
+```text
+Host (Claude / ChatGPT)          This Next.js app
+-----------------------          ----------------
+tools/call greet          ---->  /mcp
+                          <----  content + structuredContent
+resources/read ui://...   ---->  /mcp
+                          <----  HTML of "/" + _meta.ui (CSP)
+
+Widget (sandboxed iframe in the host)
+  scripts, styles, RSC    ---->  /_next/... (CORS)
+  App bridge  <--- postMessage (JSON-RPC) --->  host
+  tools/call translate    ---->  host  ---->  /mcp
 ```
 
 ## Getting started
