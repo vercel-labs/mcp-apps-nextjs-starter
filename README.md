@@ -161,4 +161,4 @@ next.config.ts                     assetPrefix, dev origins, CORS headers and pr
 - [MCP Apps overview](https://modelcontextprotocol.io/extensions/apps/overview) · [specification](https://github.com/modelcontextprotocol/ext-apps/blob/main/specification/2026-01-26/apps.mdx) · [SDK docs](https://apps.extensions.modelcontextprotocol.io/api/)
 - [Build MCP Apps for Claude](https://claude.com/docs/connectors/building/mcp-apps/getting-started) · [design guidelines](https://claude.com/docs/connectors/building/mcp-apps/design-guidelines)
 - [Add UI to your MCP server (ChatGPT)](https://developers.openai.com/plugins/build/chatgpt-ui) · [UI guidelines](https://developers.openai.com/plugins/concepts/ui-guidelines)
-- [mcp-handler](https://github.com/vercel-labs/mcp-handler)
+- [MCP on Vercel](https://vercel.com/docs/mcp#ui-with-mcp-apps) · [deploy MCP servers](https://vercel.com/docs/mcp/deploy-mcp-servers-to-vercel) · [mcp-handler](https://github.com/vercel-labs/mcp-handler)
