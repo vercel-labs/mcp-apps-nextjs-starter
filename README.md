@@ -92,7 +92,7 @@ In `next dev`, the host's CSP blocks `eval`, which React uses only for developme
 
 `BASE_URL` is derived from Vercel's system environment variables. Connect hosts to `https://your-app.vercel.app/mcp`.
 
-- **Deployment Protection**: preview deployments are protected by default. Hosts can't load a protected widget, so test against production, or disable protection for previews. If you only need the server's self-fetch of the widget HTML to get through, enable [Protection Bypass for Automation](https://vercel.com/docs/deployment-protection/methods-to-bypass-deployment-protection/protection-bypass-automation). The server sends `VERCEL_AUTOMATION_BYPASS_SECRET` automatically.
+- **Deployment Protection**: preview deployments are protected by default, and hosts can't load a protected widget. Test against production, or disable [Deployment Protection](https://vercel.com/docs/deployment-protection) for previews.
 - **Skew Protection (recommended)**: hosts cache widget HTML (ChatGPT for up to an hour). That HTML references hashed assets on your domain, which disappear on the next deploy. Enable [Skew Protection](https://vercel.com/docs/skew-protection) and add the hosts' sandbox origins under **Allowed Domains for Cross-Site Fetch**: `*.claudemcpcontent.com` and `*.oaiusercontent.com`. Next.js then pins asset requests to the deployment that rendered the HTML.
 - **Breaking UI changes**: bump `WIDGET_URI` in `lib/widget.ts`, because hosts treat the URI as a cache key.
 
@@ -107,7 +107,7 @@ The template uses only the [MCP Apps spec](https://github.com/modelcontextprotoc
 | Sandbox domain (`_meta.ui.domain`) | Optional; needed for a stable origin (own OAuth, CORS allowlists, embedded sites). Must be `{sha256(connector URL)[0:32]}.claudemcpcontent.com`. Set `CLAUDE_WIDGET_DOMAIN=auto`. | Required to submit an app with UI; an origin unique to your app. Set `CHATGPT_WIDGET_DOMAIN`. |
 | Host fonts | Anthropic Sans from `https://assets.claude.ai` (added to the CSP for Claude requests) | System fonts |
 | External links | Confirmation dialog unless the link's origin is on your directory listing's **Allowed link URIs** list | `ui/open-link` |
-| Submission | [Connector submission](https://claude.com/docs/connectors/building/submission): every tool needs `title` + `readOnlyHint`/`destructiveHint` | [App submission](https://developers.openai.com/plugins/deploy/submission): `readOnlyHint`, `openWorldHint`, `destructiveHint` on every tool; domain verification via `OPENAI_APPS_CHALLENGE_TOKEN` (served at `/.well-known/openai-apps-challenge`) |
+| Submission | [Connector submission](https://claude.com/docs/connectors/building/submission): every tool needs `title` + `readOnlyHint`/`destructiveHint` | [App submission](https://developers.openai.com/plugins/deploy/submission): `readOnlyHint`, `openWorldHint`, `destructiveHint` on every tool |
 | Limits | ~150,000 characters per tool result; 240 s per tool call | Resource contents cached for up to 1 hour |
 
 Because one `ui.domain` value can't satisfy both hosts, `lib/widget.ts` picks it per request from the `clientInfo` each MCP request carries. `clientInfo` is self-reported and its values aren't documented, so when the host is unknown the domain is simply omitted. Hosts then use their default sandbox origin.
@@ -138,21 +138,7 @@ Because one `ui.domain` value can't satisfy both hosts, `lib/widget.ts` picks it
 - **Widget**: `app/page.tsx` (plus any other pages). Read state with `useMcpApp()` from `app/hooks/use-mcp-app.ts`.
 - **CSP**: add every origin the widget fetches from or loads assets from to `widgetCsp()` in `lib/widget.ts`. Keep the list minimal: hosts review it, and `resourceDomains` also allows scripts.
 - **Styling**: use the host-variable tokens in `app/globals.css` (`bg-background-secondary`, `text-text-secondary`, `border-border-primary`, …) so the widget follows each host's theme.
-
-### Adding auth (optional)
-
-Both hosts support OAuth 2.1 with Client ID Metadata Documents and Dynamic Client Registration. Wrap the handler with `withMcpAuth` from `mcp-handler`, and serve protected resource metadata with `protectedResourceHandler` at `app/.well-known/oauth-protected-resource/route.ts`:
-
-```ts
-import { withMcpAuth } from "mcp-handler";
-
-const authHandler = withMcpAuth(handler, verifyToken, {
-  required: true,
-  resourceMetadataPath: "/.well-known/oauth-protected-resource",
-});
-```
-
-See [mcp-handler authorization](https://github.com/vercel/mcp-handler/blob/main/docs/AUTHORIZATION.md), [Claude](https://claude.com/docs/connectors/building/authentication) and [ChatGPT](https://developers.openai.com/plugins/build/auth) auth docs.
+- **Auth**: to require sign-in, wrap the handler with `withMcpAuth` from `mcp-handler` ([guide](https://github.com/vercel/mcp-handler/blob/main/docs/AUTHORIZATION.md)). Both hosts support OAuth with Client ID Metadata Documents and Dynamic Client Registration ([Claude](https://claude.com/docs/connectors/building/authentication), [ChatGPT](https://developers.openai.com/plugins/build/auth)).
 
 ## Environment variables
 
@@ -165,7 +151,6 @@ All optional on Vercel. See `.env.example`.
 | `MCP_ALLOWED_ORIGINS` | Extra browser origins allowed to call `/mcp` (comma-separated). |
 | `CLAUDE_WIDGET_DOMAIN` | `auto` or an explicit `{hash}.claudemcpcontent.com`. |
 | `CHATGPT_WIDGET_DOMAIN` | ChatGPT sandbox origin for your app. |
-| `OPENAI_APPS_CHALLENGE_TOKEN` | ChatGPT domain-verification token. |
 
 ## Project structure
 
@@ -178,7 +163,6 @@ app/
   components/mcp-app-shell.tsx     Host styles, safe areas, external links
   components/iframe-bootstrap.tsx  Inline script for running inside the sandbox
   layout.tsx, globals.css          Root layout, host-variable theme tokens
-  .well-known/openai-apps-challenge/route.ts
 lib/
   widget.ts                        Widget URI, CSP/domain metadata, host detection, HTML loading
   mcp-cors.ts                      Origin validation + CORS for /mcp

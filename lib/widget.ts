@@ -147,16 +147,10 @@ export function getWidgetHtml(path = "/"): Promise<string> {
 
 async function fetchWidgetHtml(path: string): Promise<string> {
   const url = new URL(path, baseURL);
-  const headers = new Headers({ accept: "text/html" });
-  // Lets the self-fetch through Vercel Deployment Protection on previews when
-  // "Protection Bypass for Automation" is enabled.
-  const bypass = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
-  if (bypass) headers.set("x-vercel-protection-bypass", bypass);
-
   const res = await fetch(url, {
-    headers,
+    headers: { accept: "text/html" },
     cache: "no-store",
-    // Don't follow redirects (e.g. to a login page) or forward the bypass secret.
+    // A redirect (e.g. to a login page) means the page isn't publicly reachable.
     redirect: "manual",
     signal: AbortSignal.timeout(10_000),
   });

@@ -41,7 +41,8 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
+  // `.well-known` routes (e.g. OAuth metadata from mcp-handler) set their own CORS.
   matcher: [
-    "/((?!mcp(?:$|/)|_next/static|_next/image|\\.well-known|favicon\\.ico).*)",
+    "/((?!mcp(?:$|/)|_next/static|_next/image|\\.well-known).*)",
   ],
 };

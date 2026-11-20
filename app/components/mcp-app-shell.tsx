@@ -63,7 +63,6 @@ export function McpAppShell({
   const insets = hostContext?.safeAreaInsets;
   return (
     <div
-      data-display-mode={hostContext?.displayMode ?? "inline"}
       style={{
         paddingTop: insets?.top,
         paddingRight: insets?.right,

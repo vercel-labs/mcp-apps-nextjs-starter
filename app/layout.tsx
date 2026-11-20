@@ -7,9 +7,6 @@ import { McpAppShell } from "./components/mcp-app-shell";
 export const metadata: Metadata = {
   title: "MCP Apps Next.js Starter",
   description: "Next.js starter for MCP Apps that render in Claude, ChatGPT and other hosts.",
-  // Absolute URLs: inside a host, relative URLs resolve against the sandbox.
-  metadataBase: new URL(baseURL),
-  icons: { icon: `${baseURL}/favicon.ico` },
 };
 
 export const viewport: Viewport = {
