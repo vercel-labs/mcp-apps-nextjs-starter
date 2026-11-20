@@ -112,26 +112,6 @@ The template uses only the [MCP Apps spec](https://github.com/modelcontextprotoc
 
 Because one `ui.domain` value can't satisfy both hosts, `lib/widget.ts` picks it per request from the `clientInfo` each MCP request carries. `clientInfo` is self-reported and its values aren't documented, so when the host is unknown the domain is simply omitted. Hosts then use their default sandbox origin.
 
-### Known limitations
-
-- **Hosts that render through `srcdoc` or `blob:` URLs aren't supported.** Next.js' App Router needs a hierarchical document URL. Claude, ChatGPT and the reference basic-host work.
-- In hosts that write the HTML into a blank iframe (like basic-host), in-widget navigation replaces the history entry instead of pushing one, because the frame's URL can't be reloaded. Use in-app links to navigate back.
-
-## Security
-
-- **Widget CSP** (`lib/widget.ts`): hosts allow the widget to reach only the origins it declares.
-  - `connectDomains` and `resourceDomains` contain just this app's origin. In `next dev`, `connectDomains` also gets the HMR WebSocket origin, and requests detected as Claude add Claude's font origin.
-  - There are no `frameDomains` or `baseUriDomains`, no `<base>` tag, and no `unsafe-eval`. The SDK runs zod in jitless mode.
-  - The CSP is advertised both in `resources/list`, for review at connection time, and in `resources/read`, which takes precedence.
-- **`/mcp`** (`lib/mcp-cors.ts`) validates `Origin` as the MCP transport spec requires:
-  - Unknown browser origins get `403`.
-  - Allowed origins: this app, Claude, ChatGPT, localhost in development, and `MCP_ALLOWED_ORIGINS`.
-  - CORS reflects only allowed origins and never allows credentials.
-  - The widget doesn't call `/mcp` directly. It goes through the host (`app.callServerTool`).
-- **Pages and assets** (`proxy.ts`, `next.config.ts`): `Access-Control-Allow-Origin: *` on `GET`/`HEAD` only, for public, uncredentialed content. `Access-Control-Expose-Headers: *` lets the Next.js router read its response headers (such as `x-nextjs-deployment-id` on Vercel); without it, client-side navigation falls back to a full page load, which the sandbox blocks. Server Actions and other writes stay same-origin. If the widget calls your own route handlers with credentials, give those routes an explicit allowlist.
-- **Links**: the widget never navigates itself. External `http(s)`/`mailto` links go through `ui/open-link`, and only when the host supports it.
-- **Config**: `BASE_URL`, `CLAUDE_WIDGET_DOMAIN`, `CHATGPT_WIDGET_DOMAIN` and `MCP_ALLOWED_ORIGINS` are validated at startup, so malformed values fail the build instead of ending up in CSP or CORS headers.
-
 ## Customize
 
 - **Tools and resources**: `app/mcp/route.ts`. Keep `content` meaningful for the model and for hosts without UI. Put what the widget needs in `structuredContent`. For real apps, split data-fetching tools from the tool that renders UI ([guide](https://developers.openai.com/plugins/build/chatgpt-ui#separate-data-processing-from-ui-rendering)).
@@ -171,6 +151,11 @@ baseUrl.ts                         Public URL resolution (env / Vercel / localho
 proxy.ts                           CORS for pages and RSC payloads
 next.config.ts                     assetPrefix, dev origins, static asset CORS
 ```
+
+## Known limitations
+
+- **Hosts that render through `srcdoc` or `blob:` URLs aren't supported.** Next.js' App Router needs a hierarchical document URL. Claude, ChatGPT and the reference basic-host work.
+- In hosts that write the HTML into a blank iframe (like basic-host), in-widget navigation replaces the history entry instead of pushing one, because the frame's URL can't be reloaded. Use in-app links to navigate back.
 
 ## Learn more
 
