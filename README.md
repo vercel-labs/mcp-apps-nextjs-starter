@@ -143,13 +143,13 @@ app/
   components/mcp-app-shell.tsx     Host styles, safe areas, external links
   components/iframe-bootstrap.tsx  Inline script for running inside the sandbox
   layout.tsx, globals.css          Root layout, host-variable theme tokens
+  cors-preflight/route.ts          Answers CORS preflights (see next.config.ts)
 lib/
   widget.ts                        Widget URI, CSP/domain metadata, host detection, HTML loading
   mcp-cors.ts                      Origin validation + CORS for /mcp
   greetings.ts                     Example domain logic
 baseUrl.ts                         Public URL resolution (env / Vercel / localhost)
-proxy.ts                           CORS for pages and RSC payloads
-next.config.ts                     assetPrefix, dev origins, static asset CORS
+next.config.ts                     assetPrefix, dev origins, CORS headers and preflight rewrite
 ```
 
 ## Known limitations
